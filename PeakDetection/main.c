@@ -4,7 +4,8 @@ int main() {
   int peak_detection(int peaks[3], float nums[10968]);
 
   printf("Hello world");
-  int peaks[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int peaks[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   // float peaks[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   FILE *input = fopen("Data/prototype_slow2.txt", "r");
   if (input == NULL) {
@@ -22,12 +23,12 @@ int main() {
   }
   fclose(input);
   peak_detection(peaks, nums);
-  for (int i = 0; i < 22; i++) {
+  for (int i = 0; i < 50; i++) {
     printf("\n%d", peaks[i]);
   }
   FILE *fp = fopen("peak_results.txt", "w");
   if (fp) {
-    for (int i = 0; i < 22; i++) {
+    for (int i = 0; i < 50; i++) {
       fprintf(fp, "%d,", peaks[i]);
     }
   }
@@ -39,10 +40,26 @@ int peak_detection(int peaks[3], float nums[10968]) {
   // int nums[15] = {4, 5, 6, 7, 6, 5, 4, 2, 3, 4, 5, 6, 8, 6, 5};
   float threshold = 1.0;
 
+  // int j = 0;
+  // for (int i = 1; i < 10968-1; i++) { // 10968
+  //   // printf("\n%f", nums[i]);
+  //   if (nums[i] > nums[i-1] && nums[i] > nums[i+1] && nums[i] > threshold) {
+  //     if (j < 22) {
+  //       peaks[j] = i;
+  //       j++;
+  //     }
+  //   }
+  // }
+
   int j = 0;
-  for (int i = 0; i < 10968-10; i++) {
-    if (nums[i] > nums[i-1] && nums[i] > nums[i+1] && nums[i] > threshold) {
-      if (j < 22) {
+  int right = 0;
+  for (int i = 1; i < 10968-1; i++) { // 10968
+    // printf("\n%f", nums[i]);
+    if (nums[i] != nums[i+1] && nums[i] != nums[i-1]) {
+      right = i-1;
+    }
+    if (nums[i] > nums[right] && nums[i] > nums[i+1] && nums[i] > threshold) {
+      if (j < 50) {
         peaks[j] = i;
         j++;
       }
@@ -52,4 +69,7 @@ int peak_detection(int peaks[3], float nums[10968]) {
 }
 
 // save indices to a file and use a dynamic allocated array
-// plot indices on a graph with the original signal on python to visualize peaks
+// dynamic allocate the peaks array as well
+// error handling
+// averaging box filter
+// account for flat maximums 
