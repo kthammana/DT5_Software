@@ -53,6 +53,8 @@ int peak_detection(int peaks[3], float nums[10968]) {
 
   int j = 0;
   int right = 0;
+  int wait = -1;
+  int curr_peak = 0;
   for (int i = 1; i < 10968-1; i++) { // 10968
     // printf("\n%f", nums[i]);
     if (nums[i] != nums[i+1] && nums[i] != nums[i-1]) {
@@ -60,9 +62,22 @@ int peak_detection(int peaks[3], float nums[10968]) {
     }
     if (nums[i] > nums[right] && nums[i] > nums[i+1] && nums[i] > threshold) {
       if (j < 50) {
-        peaks[j] = i;
-        j++;
+        if (wait == -1 || (wait != -1 && nums[i] >= nums[curr_peak])) {
+          curr_peak = i;
+        }
+        // curr_peak = i;
+        wait = 0;
+        // peaks[j] = i;
+        // j++;
       }
+    }
+    if (wait != -1) {
+      wait++;
+    }
+    if (wait == 150) {
+      peaks[j] = curr_peak;
+      j++;
+      wait = -1;
     }
   }
   return 1;
@@ -72,4 +87,5 @@ int peak_detection(int peaks[3], float nums[10968]) {
 // dynamic allocate the peaks array as well
 // error handling
 // averaging box filter
-// account for flat maximums 
+
+// error analysis between peak of averaged signal vs peak of actual signal
